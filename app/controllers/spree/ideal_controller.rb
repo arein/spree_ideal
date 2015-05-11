@@ -27,9 +27,17 @@ class Spree::IdealController < ApplicationController
       return
     end
 
-    ideal_payment = Spree::Payment.where(order_id: params[:orderID]).take
+    order = Spree::Order.where(number: params[:orderID]).take
 
-    if params.blank? or ideal_payment.blank?
+    if params.blank? or order.blank?
+      flash[:error] = I18n.t("ideal.payment_not_found")
+      redirect_to '/checkout/payment', :status => 302
+      return
+    end
+
+    ideal_payment = order.last_payment
+
+    if params.blank? or ideal_payment.blank? or  !order.last_payment_method.kind_of? Spree::PaymentMethod::Ideal
        flash[:error] = I18n.t("ideal.payment_not_found")
        redirect_to '/checkout/payment', :status => 302
        return
@@ -76,9 +84,18 @@ class Spree::IdealController < ApplicationController
     if order.state.eql? "complete"  # complete again via browser back or recalling ideal "go" url
       success_redirect order
     else
-      order.finalize!
-      order.state = "complete"
-      order.save!
+      ActiveRecord::Base.transaction do
+        ideal_payment.update_attribute(:ideal_transaction, params[:PAYID])
+        if ideal_payment.ideal_log.blank?
+          ideal_payment.update_attribute(:ideal_log, "payment_successful,")
+        else
+          ideal_payment.update_attribute(:ideal_log, ideal_payment.ideal_log + "payment_successful,")
+        end
+        ideal_payment.complete!
+        order.finalize!
+        order.state = "complete"
+        order.save!
+      end
       session[:order_id] = nil
       flash[:success] = I18n.t("ideal.completed_successfully")
       success_redirect order
@@ -87,21 +104,54 @@ class Spree::IdealController < ApplicationController
   end
 
   def decline
+    self.handle_status(params, "canceled")
     flash[:error] = I18n.t("ideal.decline")
     redirect_to '/checkout/payment', :status => 302
   end
 
   def exception
+    self.handle_status(params, "exception")
     flash[:error] = I18n.t("ideal.exception")
     redirect_to '/checkout/payment', :status => 302
   end
 
   def cancel
+    self.handle_status(params, "canceled")
     flash[:error] = I18n.t("ideal.canceled")
     redirect_to '/checkout/payment', :status => 302
   end
 
   private
+
+  def handle_status(params, message)
+    if params.blank? or params[:orderID].blank?
+      return
+    end
+
+    order = Spree::Order.where(number: params[:orderID]).take
+
+    if order.blank?
+      return
+    end
+
+    unless order.last_payment_method.kind_of? Spree::PaymentMethod::Ideal
+      return
+    end
+
+    ideal_payment = order.last_payment
+
+    if ideal_payment.blank?
+      return
+    end
+
+    if ideal_payment.ideal_log.blank?
+      ideal_payment.update_attribute(:ideal_log, message + ",")
+    else
+      ideal_payment.update_attribute(:ideal_log, ideal_payment.ideal_log + message + ",")
+    end
+    ideal_payment.save!
+
+  end
 
   def success_redirect order
     redirect_to "/orders/#{order.number}", :status => 302

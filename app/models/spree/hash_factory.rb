@@ -18,7 +18,7 @@ class Spree::HashFactory
               +  "DECLINEURL=" + ideal_payment_settings.preferred_decline_url + secret + "" \
               +  "EXCEPTIONURL=" + ideal_payment_settings.preferred_exception_url + secret + "" \
               +  "LANGUAGE=" + language + secret + "" \
-              +  "ORDERID=" + order.id.to_s + secret + "" \
+              +  "ORDERID=" + order.number.to_s + secret + "" \
               +  "PSPID=" + ideal_payment_settings.preferred_pspid.to_s + secret + "" \
 
     case ideal_payment_settings.preferred_sha_algorithm

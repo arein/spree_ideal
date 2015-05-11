@@ -7,7 +7,7 @@ class Spree::UrlFactory
 
     url = ideal_payment_settings.preferred_abn_url + ""\
         "?PSPID=" + ideal_payment_settings.preferred_pspid + ""\
-        "&ORDERID=" + order.id.to_s + ""\
+        "&ORDERID=" + order.number.to_s + ""\
         "&AMOUNT=" + total.to_s + "" \
         "&CURRENCY=" + Spree::Config.currency.to_s + "" \
         "&LANGUAGE=" + language + ""\
