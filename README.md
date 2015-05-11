@@ -1,6 +1,6 @@
 # SpreeIdeal
 
-Extends Spree for supporting [iDEAL payment](https://www.ideal.nl/en/) with  [ABN AMRO Internetkassa](https://internetkassa.abnamro.nl).
+Adds [iDEAL payment](https://www.ideal.nl/en/) Support to Spree through [ABN AMRO Internetkassa's iDEAL Integration](https://internetkassa.abnamro.nl).
 
 ## Installation
 
