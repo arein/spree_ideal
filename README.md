@@ -32,17 +32,18 @@ Then log into either your testing or production [ABN AMRO Internetkassa Back Off
 Edit the following fields according to this doc:
 
 * ABN URL: https://internetkassa.abnamro.nl/ncol/test/orderstandard.asp for testing or https://internetkassa.abnamro.nl/ncol/prod/orderstandard.asp for production
-* PSPID: You'll find the PSPID in the fotter of the Back Office
-* Accept URL: shop base url /ideal/accept
-* Decline URL: shop base url /ideal/decline
-* Exception URL: shop base url /ideal/exception
-* Cancel URL: /ideal/cancel
+* PSPID: You'll find the PSPID in the footer of the Back Office
+* Accept URL: <shop base url>/ideal/accept
+* Decline URL: <shop base url>/ideal/decline
+* Exception URL: <shop base url>/ideal/exception
+* Cancel URL: <shop base url>/ideal/cancel
 * SHA IN Pass Phrase: Set this in the Back Office under Configuration -> Technical Information -> Data and Origin Verification -> SHA-IN Pass Phrase
 * SHA Out Pass Phrase: Set this in the Back Office under Configuration -> Technical Information -> Transaction Feedback -> SHA-OUT Pass Phrase (may not equal the SHA-IN Pass Phrase)
 * SHA Algorithm: Either "SHA-1", "SHA-256", or "SHA-512", according to the setting in the Back Office under Configuration -> Technical Information -> Global Security Parameters -> Hash Algorithm
-* Shop Base URL: The shop base URL
+* Shop Base URL: <shop base url>
 
-__IMPORTANT:__In the backoffice you need to carry out a few actions:
+
+__IMPORTANT__:In the backoffice you need to carry out a few actions:
 * Set Configuration -> Technical Information -> Transaction Feedback -> "I would like to receive transaction feedback parameters on the redirection URLs" to YES
 * Set Configuration -> Technical Information -> Transaction Feedback -> "Timing of the request" to "Always Deferred" and "Request Method" to "GET"
 * Set Configuration -> Technical Information -> Transaction Feedback -> "Dynamic e-Commerce parameters" to "ACCEPTANCE", "AMOUNT", "BRAND", "CARDNO", "CURRENCY", "NCERROR", "ORDERID", "PAYID", "PM", "STATUS"
