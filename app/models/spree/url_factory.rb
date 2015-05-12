@@ -3,7 +3,7 @@ class Spree::UrlFactory
 
     total = (order.total * 100).to_i # Convert according to
 
-    language = Spree::LocaleUtil.format_locale(locale)
+    language = Spree::IdealCountryUtil.format_locale(locale)
 
     url = ideal_payment_settings.preferred_abn_url + ""\
         "?PSPID=" + ideal_payment_settings.preferred_pspid + ""\
