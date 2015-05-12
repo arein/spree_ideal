@@ -1,6 +1,7 @@
 class Spree::IdealController < ApplicationController
 
-  skip_before_filter :verify_authenticity_token, :only => :status
+  skip_before_filter :verify_authenticity_token, :only => [:status, :back]
+  skip_before_action :verify_authenticity_token, :only => :back
 
   def success
 
