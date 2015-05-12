@@ -1,6 +1,6 @@
 class Spree::IdealCountryUtil
   def self.format_locale(locale)
-    case locale
+    case locale.downcase
       when "ar"
         return "ar_AR"
       when "cs"
