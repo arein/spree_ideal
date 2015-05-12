@@ -79,6 +79,18 @@ class Spree::IdealController < ApplicationController
     end
 
     if order.state.eql? "complete"  # complete again via browser back or recalling ideal "go" url
+      # The default behavior is to accept multiple calls to this URL
+      # In general, this URL should be called twice
+      # (i.e. once by the user and once by the bank)
+      # However, in some cases, e.g. when the user loses the connection
+      # It is only called once
+      if ideal_payment.ideal_log.blank?
+        ideal_payment.update_attribute(:ideal_log, "payment confirmed again by either iDEAL or user,")
+      else
+        ideal_payment.update_attribute(:ideal_log, ideal_payment.ideal_log + "payment confirmed again by either iDEAL or user,")
+      end
+      ideal_payment.save!
+
       success_redirect order
     else
       ActiveRecord::Base.transaction do
