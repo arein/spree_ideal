@@ -2,7 +2,7 @@
 
 Adds [iDEAL payment](https://www.ideal.nl/en/) Support to Spree through [ABN AMRO Internetkassa's iDEAL Integration](https://internetkassa.abnamro.nl).
 
-[![Build Status](https://travis-ci.org/arein/spree_ideal.svg?branch=master)](https://travis-ci.org/arein/spree_ideal)
+[![Build Status](https://travis-ci.org/arein/spree_ideal.svg?branch=2-4-stable)](https://travis-ci.org/arein/spree_ideal)
 
 ## Installation
 
