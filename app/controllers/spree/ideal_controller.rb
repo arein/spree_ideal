@@ -130,6 +130,11 @@ class Spree::IdealController < ApplicationController
     redirect_to '/checkout/payment', :status => 302
   end
 
+  def back
+    self.handle_status(params, "back")
+    redirect_to '/checkout/payment', :status => 302
+  end
+
   def handle_status(params, message)
     if params.blank? or params[:orderID].blank?
       return

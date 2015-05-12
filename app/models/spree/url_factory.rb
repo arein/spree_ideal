@@ -16,6 +16,6 @@ class Spree::UrlFactory
         "&DECLINEURL=" + ideal_payment_settings.preferred_decline_url + ""\
         "&EXCEPTIONURL=" + ideal_payment_settings.preferred_exception_url + ""\
         "&CANCELURL=" + ideal_payment_settings.preferred_cancel_url + ""\
-        "&BACKURL=" + ideal_payment_settings.preferred_shop_base_url + "/orders/#{order.number}"
+        "&BACKURL=" + ideal_payment_settings.preferred_shop_base_url + "/ideal/back"
   end
 end
