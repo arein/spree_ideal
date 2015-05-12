@@ -1,4 +1,3 @@
-require 'pp'
 require 'uri'
 
 class Spree::IdealController < ApplicationController
