@@ -1,4 +1,4 @@
-class Spree::LocaleHelper
+class Spree::LocaleUtil
   def self.format_locale(locale)
     case locale
       when "ar"
