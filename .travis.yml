@@ -1,7 +1,11 @@
-language: ruby
+before_script:
+  - sh -e /etc/init.d/xvfb start
+  - export DISPLAY=:99.0
+bundler_args: --without development production --quiet
+before_install:
+  - cd $GEM; export BUNDLE_GEMFILE="`pwd`/Gemfile"
+script:
+  - bundle exec rake test_app
+  - bundle exec rake spec
 rvm:
-  - 2.2.1
-
-install: ./install-test-project.sh 
-
-script: "bundle exec rspec spec"
+  - 2.2
