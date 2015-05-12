@@ -1,5 +1,3 @@
-require 'uri'
-
 class Spree::IdealController < ApplicationController
 
   skip_before_filter :verify_authenticity_token, :only => :status
