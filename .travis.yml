@@ -6,3 +6,9 @@ install: ./install-test-project.sh
 script: "bundle exec rspec spec"
 rvm:
   - 2.2.1
+
+# whitelist
+branches:
+  only:
+    - master
+    - 2-4-stable
