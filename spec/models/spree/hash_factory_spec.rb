@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Spree::HashFactory do
 
   before(:each) do
-    @order = Order.new()
+    @order = FactoryGirl.create(:order)
     @payment_method = FactoryGirl.create(:ideal)
   end
 
