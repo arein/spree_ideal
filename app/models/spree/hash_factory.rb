@@ -12,7 +12,7 @@ class Spree::HashFactory
     total = (order.total * 100).to_i # Convert according to
     to_hash = "ACCEPTURL=" + ideal_payment_settings.preferred_accept_url + secret + "" \
               +  "AMOUNT=" + total.to_s + secret + ""\
-              +  "BACKURL=" + ideal_payment_settings.preferred_shop_base_url + "/orders/#{order.number}" + secret + "" \
+              +  "BACKURL=" + ideal_payment_settings.preferred_shop_base_url + "/ideal/back" + secret + "" \
               +  "CANCELURL=" + ideal_payment_settings.preferred_cancel_url + secret + "" \
               +  "CURRENCY=" + Spree::Config.currency.to_s + secret + "" \
               +  "DECLINEURL=" + ideal_payment_settings.preferred_decline_url + secret + "" \
