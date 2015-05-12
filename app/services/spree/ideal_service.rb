@@ -1,5 +1,3 @@
-require 'httparty'
-
 module Spree
   class IdealService
 
