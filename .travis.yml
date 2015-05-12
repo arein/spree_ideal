@@ -1,0 +1,7 @@
+language: ruby
+rvm:
+  - 2.2.1
+
+install: ./install-test-project.sh 
+
+script: "bundle exec rspec spec"
