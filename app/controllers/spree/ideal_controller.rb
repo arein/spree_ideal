@@ -59,7 +59,6 @@ class Spree::IdealController < ApplicationController
 
     sha_out_hash = Spree::HashFactory.create_sha_out_hash(params, secret, hash_algorithm)
 
-    pp sha_out_hash
     unless sha_out_hash.eql? shasign
       flash[:error] = I18n.t("ideal.security_error")
       redirect_to '/checkout/payment', :status => 302
