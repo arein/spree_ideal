@@ -3,7 +3,7 @@ class Spree::HashFactory
 
     secret = ideal_payment_settings.preferred_sha_in_pass_phrase.to_s
 
-    language = Spree::IdealCountryUtil.format_locale(locale)
+    language = Spree::IdealCountryUtil.format_locale(locale.to_s)
 
     if secret.blank?
       secret = "" # Fallback if secret not set
