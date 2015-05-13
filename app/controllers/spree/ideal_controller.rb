@@ -4,8 +4,7 @@ class Spree::IdealController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => :back
 
   def success
-
-    if params[:orderID].blank?
+    if params.blank? or params[:orderID].blank?
       flash[:error] = I18n.t("ideal.order_invalid_setup")
       redirect_to '/checkout/payment', :status => 302
       return
@@ -13,13 +12,13 @@ class Spree::IdealController < ApplicationController
 
     # Some Validation
     if !params.has_key?("currency") || params[:currency].blank? ||
-       !params.has_key?("amount") || params[:amount].blank? ||
-       !params.has_key?("PM") || params[:PM].blank? ||
-       !params.has_key?("CARDNO") || params[:CARDNO].blank? ||
-       !params.has_key?("STATUS") || params[:STATUS].blank? ||
-       !params.has_key?("PAYID") || params[:PAYID].blank? ||
-       !params.has_key?("NCERROR") || params[:NCERROR].blank? ||
-       !params.has_key?("BRAND") || params[:BRAND].blank?
+        !params.has_key?("amount") || params[:amount].blank? ||
+        !params.has_key?("PM") || params[:PM].blank? ||
+        !params.has_key?("CARDNO") || params[:CARDNO].blank? ||
+        !params.has_key?("STATUS") || params[:STATUS].blank? ||
+        !params.has_key?("PAYID") || params[:PAYID].blank? ||
+        !params.has_key?("NCERROR") || params[:NCERROR].blank? ||
+        !params.has_key?("BRAND") || params[:BRAND].blank?
       flash[:error] = I18n.t("ideal.order_invalid_setup")
       redirect_to '/checkout/payment', :status => 302
       return
@@ -27,7 +26,8 @@ class Spree::IdealController < ApplicationController
 
     order = Spree::Order.where(number: params[:orderID]).take
 
-    if params.blank? or order.blank?
+    if order.nil?
+      Rails.logger.warn("Order is nil")
       flash[:error] = I18n.t("ideal.payment_not_found")
       redirect_to '/checkout/payment', :status => 302
       return
@@ -35,10 +35,11 @@ class Spree::IdealController < ApplicationController
 
     ideal_payment = order.last_payment
 
-    if params.blank? or ideal_payment.blank? or  !order.last_payment_method.kind_of? Spree::PaymentMethod::Ideal
-       flash[:error] = I18n.t("ideal.payment_not_found")
-       redirect_to '/checkout/payment', :status => 302
-       return
+    if ideal_payment.blank? or  !order.last_payment_method.kind_of? Spree::PaymentMethod::Ideal
+      Rails.logger.warn("Payment is nil or not Ideal")
+      flash[:error] = I18n.t("ideal.payment_not_found")
+      redirect_to '/checkout/payment', :status => 302
+      return
     end
 
     hash_algorithm = ideal_payment.payment_method.preferred_sha_algorithm
@@ -46,6 +47,7 @@ class Spree::IdealController < ApplicationController
 
     # Some Validation
     unless params.has_key?("SHASIGN")
+      Rails.logger.warn("Hash is not present")
       flash[:error] = I18n.t("ideal.order_invalid_setup")
       redirect_to '/checkout/payment', :status => 302
       return
@@ -60,19 +62,14 @@ class Spree::IdealController < ApplicationController
     sha_out_hash = Spree::HashFactory.create_sha_out_hash(params, secret, hash_algorithm)
 
     unless sha_out_hash.eql? shasign
+      Rails.logger.warn("Hashes do not match")
       flash[:error] = I18n.t("ideal.security_error")
       redirect_to '/checkout/payment', :status => 302
       return
     end
 
-    order = ideal_payment.order
-    if order.blank?
-     	flash[:error] = I18n.t("ideal.order_not_found")
-     	redirect_to '/checkout/payment', :status => 302
-     	return
-    end
-
     if not order.state.eql? "complete" and not order.state.eql? "payment" and not order.state.eql? "checkout"
+      Rails.logger.warn("Order is in an invalid state")
       flash[:error] = I18n.t("ideal.order_invalid_state")
       redirect_to '/checkout/payment', :status => 302
       return
@@ -142,7 +139,7 @@ class Spree::IdealController < ApplicationController
 
     order = Spree::Order.where(number: params[:orderID]).take
 
-    if order.blank?
+    if order.nil?
       return
     end
 
@@ -168,5 +165,4 @@ class Spree::IdealController < ApplicationController
   def success_redirect order
     redirect_to "/orders/#{order.number}", :status => 302
   end
-
 end
