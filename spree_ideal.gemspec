@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_ideal'
-  s.version     = '2.4.10'
+  s.version     = '2.4.11'
   s.summary     = 'Add iDEAL payment to spree'
   s.description = ''
   s.required_ruby_version = '>= 2.2.1'
