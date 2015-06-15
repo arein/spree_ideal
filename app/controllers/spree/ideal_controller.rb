@@ -12,13 +12,13 @@ class Spree::IdealController < ApplicationController
 
     # Some Validation
     if !params.has_key?("currency") || params[:currency].blank? ||
-       !params.has_key?("amount") || params[:amount].blank? ||
-       !params.has_key?("PM") || params[:PM].blank? ||
-       !params.has_key?("CARDNO") || params[:CARDNO].blank? ||
-       !params.has_key?("STATUS") || params[:STATUS].blank? ||
-       !params.has_key?("PAYID") || params[:PAYID].blank? ||
-       !params.has_key?("NCERROR") || params[:NCERROR].blank? ||
-       !params.has_key?("BRAND") || params[:BRAND].blank?
+        !params.has_key?("amount") || params[:amount].blank? ||
+        !params.has_key?("PM") || params[:PM].blank? ||
+        !params.has_key?("CARDNO") || params[:CARDNO].blank? ||
+        !params.has_key?("STATUS") || params[:STATUS].blank? ||
+        !params.has_key?("PAYID") || params[:PAYID].blank? ||
+        !params.has_key?("NCERROR") || params[:NCERROR].blank? ||
+        !params.has_key?("BRAND") || params[:BRAND].blank?
       flash[:error] = I18n.t("ideal.order_invalid_setup")
       redirect_to '/checkout/payment', :status => 302
       return
@@ -36,10 +36,10 @@ class Spree::IdealController < ApplicationController
     ideal_payment = order.last_payment
 
     if ideal_payment.blank? or  !order.last_payment_method.kind_of? Spree::PaymentMethod::Ideal
-        Rails.logger.warn("Payment is nil or not Ideal")
-       flash[:error] = I18n.t("ideal.payment_not_found")
-       redirect_to '/checkout/payment', :status => 302
-       return
+      Rails.logger.warn("Payment is nil or not Ideal")
+      flash[:error] = I18n.t("ideal.payment_not_found")
+      redirect_to '/checkout/payment', :status => 302
+      return
     end
 
     hash_algorithm = ideal_payment.payment_method.preferred_sha_algorithm
@@ -88,6 +88,7 @@ class Spree::IdealController < ApplicationController
       end
       ideal_payment.save!
 
+      flash[:order_completed] = I18n.t("ideal.completed_successfully")
       success_redirect order
     else
       ActiveRecord::Base.transaction do
@@ -103,7 +104,7 @@ class Spree::IdealController < ApplicationController
         order.save!
       end
       session[:order_id] = nil
-      flash[:success] = I18n.t("ideal.completed_successfully")
+      flash[:order_completed] = I18n.t("ideal.completed_successfully")
       success_redirect order
     end
 
