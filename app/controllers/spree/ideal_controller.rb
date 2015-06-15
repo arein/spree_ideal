@@ -88,6 +88,7 @@ class Spree::IdealController < ApplicationController
       end
       ideal_payment.save!
 
+      flash[:order_completed] = I18n.t("ideal.completed_successfully")
       success_redirect order
     else
       ActiveRecord::Base.transaction do
@@ -103,7 +104,7 @@ class Spree::IdealController < ApplicationController
         order.save!
       end
       session[:order_id] = nil
-      flash[:success] = I18n.t("ideal.completed_successfully")
+      flash[:order_completed] = I18n.t("ideal.completed_successfully")
       success_redirect order
     end
 
